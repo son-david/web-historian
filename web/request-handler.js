@@ -4,7 +4,6 @@ var fs = require('fs');
 // require more modules/folders here!
 
 exports.handleRequest = function (req, res) {
-
   var action = actions[req.method];
 
   if (action) {
@@ -16,12 +15,16 @@ exports.handleRequest = function (req, res) {
   }
 };
 
+
+
+
+
 var actions = {
   'GET': function(req, res) {
-    if (req.url === "/www.google.com"){
+    if (req.url === '/'){
+      fs.createReadStream(path.join(__dirname, '../index.html')).pipe(res);
+    } else if (req.url === "/www.google.com") {
       res.end('/google/');
-    } else if (req.url === '/') {
-      res.end('/<input/');
     } else {
       res.writeHead(404);
       res.end();

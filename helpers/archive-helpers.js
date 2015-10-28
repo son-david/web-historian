@@ -22,20 +22,62 @@ exports.initialize = function(pathsObj) {
   });
 };
 
-// The following function names are provided to you to suggest how you might
-// modularize your code. Keep it clean!
-
-exports.readListOfUrls = function() {
+exports.readListOfUrls = function(callback) {
+  fs.readFile(path.join(__dirname, "../test/testdata/sites.txt"), function(err, data){
+    if(err){console.log(err)}
+    callback(data.toString().split('\n')); 
+  });
 };
 
-exports.isUrlInList = function() {
+exports.isUrlInList = function(url, callback) {
+  var urlTable = {};
+  fs.readFile(path.join(__dirname, "../test/testdata/sites.txt"), function(err, data){
+    if(err){console.log(err)}
+
+    var urls = data.toString().split('\n');
+    urls.forEach(function(site) {
+      urlTable[site] = 1;
+    });
+    callback(urlTable[url]);
+  });
 };
 
-exports.addUrlToList = function() {
+exports.addUrlToList = function(url, callback) {
+   fs.appendFile(path.join(__dirname, '../test/testdata/sites.txt'), url+"\n");
+   callback();
 };
 
-exports.isUrlArchived = function() {
+exports.isUrlArchived = function(url, callback) {
+  fs.stat(path.join(__dirname, "../test/testdata/sites/"+url), function(err, stats){
+    if (err) {
+      callback(stats)
+    } else {
+      callback(stats.isFile());
+    }
+  });
 };
 
-exports.downloadUrls = function() {
+exports.downloadUrls = function(urls) {
+  urls.forEach(function(site){
+    fs.writeFile(path.join(__dirname, "../test/testdata/sites/"+site), function(err, data){
+      if (err) {
+        console.log(err);
+      } else {
+        // fs.appendFile(path.join(__dirname, "../test/testdata/sites.txt", site + '\n'));
+      }
+    });
+  });
 };
+
+
+
+
+
+
+
+
+
+
+
+
+

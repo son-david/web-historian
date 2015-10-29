@@ -32,7 +32,6 @@ var actions = {
     console.log('GET');
     if (req.url === '/'){
       fs.createReadStream(path.join(__dirname, '../index.html')).pipe(res);
-      archive.downloadUrls();
     } else if (req.url === "/www.google.com") {
       res.end('/google/');
     } else {

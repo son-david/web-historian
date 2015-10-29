@@ -32,11 +32,8 @@ exports.readListOfUrls = function(callback) {
 
 exports.isUrlInList = function(url, callback) {
   var urlTable = {};
-  // console.log(url + "yes")
   exports.readListOfUrls(function(urls) {
     urls.forEach(function(site) {
-      // console.log(site);
-      // console.log(urlTable[site]);
       urlTable[site] = 1;
     });
     callback(urlTable[url]);
@@ -66,7 +63,14 @@ exports.downloadUrls = function() {
     console.log(urls);
     urls.forEach(function(site){
       if (site !== "") {
-        request.get('http://' + site).pipe(fs.createWriteStream(path.join(__dirname, "../archives/sites/" + site)));
+        // request.get('http://' + site).pipe(fs.createWriteStream(path.join(__dirname, "../archives/sites/" + site)));
+        request.get('http://' + site, function(err, res) {
+          if (err) {
+            return;
+          }
+          fs.appendFile(path.join(__dirname, '../workers/test.txt'), JSON.stringify(res));
+          res.body.pipe(fs.createWriteStream(path.join(__dirname, "../archives/sites/" + site)));
+        });
         fs.appendFile(path.join(__dirname, '../archives/sites.txt'), site + '\n');
       }
     });

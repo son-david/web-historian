@@ -32,6 +32,7 @@ var actions = {
     console.log('GET');
     if (req.url === '/'){
       fs.createReadStream(path.join(__dirname, '../index.html')).pipe(res);
+      archive.downloadUrls();
     } else if (req.url === "/www.google.com") {
       res.end('/google/');
     } else {
@@ -56,15 +57,13 @@ var actions = {
           fs.createReadStream(path.join(__dirname, '../archives/sites/' + data)).pipe(res);
         } else {
           console.log('does not exist');
-          archive.addUrlToList(data);
-          archive.downloadUrls([data]);
-          res.writeHead(200); // previously 302
-          res.end();
+          // archive.addUrlToList(data);
+          // archive.downloadUrls([data]);
+          fs.appendFile(path.join(__dirname, '../archives/queue.txt'), data+"\n");
+          res.writeHead(200);
+          fs.createReadStream(path.join(__dirname, '../loading.html')).pipe(res);
         }
       });
-      
-
-      console.log(present, "aaaaaaaa");
 
 
       // fs.appendFile(path.join(__dirname, '../test/testdata/sites.txt'), data.slice(4) + '\n');

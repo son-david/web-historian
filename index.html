@@ -3,20 +3,13 @@
   <head>
     <meta charset="utf-8">
     <title>Archive Machine</title>
-    <!-- <link rel="stylesheet" href="./client/client/styles/styles.css"> -->
-    <!-- dependencies -->
     <script src="https://code.jquery.com/jquery-2.1.4.min.js"></script>
-    <!-- // <script src="./client/client/bower_components/underscore/underscore.js"></script> -->
-    <!-- // <script src="./client/client/bower_components/backbone/backbone.js"></script> -->
-    <!-- your scripts -->
-    <!-- // <script src="./client/client/scripts/refactor.js"></script> -->
   </head>
   <body>
     <div id="main">
       <h1>Internet Archive</h1>
       <form action="get" id="send" method="post">
         <input type="text" name="url" id="url"/>
-        <!-- <input type="submit" name="submit" class="submit"/> -->
       </form>
     </div>
     <div id="container">
@@ -48,11 +41,10 @@
               data: url,
               success: function(data) {
                 console.log('success');
-                console.log(data);
                 app.$container.html(data);
               },
               error: function(data) {
-                console.log(data);
+                // app.$container.html(data.responseText);
                 console.error('Archive: Failed to fetch website');
               }
             });

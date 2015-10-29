@@ -58,40 +58,18 @@ exports.isUrlArchived = function(url, callback) {
   });
 };
 
-exports.downloadUrls = function(urls) {
-  // path.join(__dirname, "../archives/sites/" + site), 
-  urls.forEach(function(site){
-    request.get('http://' + site).pipe(fs.createWriteStream(path.join(__dirname, "../archives/sites/" + site)));
-    // request.get({
-    //   url: 'http://' + site,
-    //   progress: function (current, total) {
-    //     console.log('downloaded %d bytes from %d', current, total);
-    //   }
-    // }, function (err, res) {
-    //   if (err) {
-    //     console.error(err);
-    //     return;
-    //   }
-    //   console.log(res.code, "yes", res.headers,"yesyes", res.buffer.toString());
-    // });
-    // fs.writeFile(path.join(__dirname, "../archives/sites/"+site), function(err, data){
-    //   if (err) {
-    //     console.log(err);
-    //   } else {
-    //     request.get({
-    //       url: 'http://' + site,
-    //       progress: function (current, total) {
-    //         console.log('downloaded %d bytes from %d', current, total);
-    //       }
-    //     }, path.join(__dirname, "../archives/sites/" + site), function (err, res) {
-    //       if (err) {
-    //         console.error(err);
-    //         return;
-    //       }
-    //       console.log(res.code, res.headers, res.file);
-    //     });
-
-        // fs.appendFile(path.join(__dirname, "../test/testdata/sites.txt", site + '\n'));
-      
+exports.downloadUrls = function() {
+  var urls = [];
+  fs.readFile(path.join(__dirname, "../archives/queue.txt"), function(err, data){
+    if(err){console.log(err)}
+    urls = data.toString().split('\n');
+    console.log(urls);
+    urls.forEach(function(site){
+      if (site !== "") {
+        request.get('http://' + site).pipe(fs.createWriteStream(path.join(__dirname, "../archives/sites/" + site)));
+        fs.appendFile(path.join(__dirname, '../archives/sites.txt'), site + '\n');
+      }
+    });
   });
+
 };
